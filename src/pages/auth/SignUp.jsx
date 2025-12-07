@@ -6,6 +6,8 @@ import { TbFidgetSpinner } from 'react-icons/tb'
 import { useForm } from 'react-hook-form'
 import useAuth from '../../hooks/useAuth'
 import { imageUpload } from '../../utils'
+
+
 //import { useState } from 'react'
 
 const SignUp = () => {
@@ -26,8 +28,8 @@ const SignUp = () => {
   const onSubmit = async data => {
     const { name, image, email, password } = data
     const imageFile = image[0]
-    // const formData = new FormData()
-    // formData.append('image', imageFile)
+    //  const formData = new FormData()
+    //  formData.append('image', imageFile)
 
     try {
       // const { data } = await axios.post(
@@ -36,9 +38,10 @@ const SignUp = () => {
       //   }`,
       //   formData
       // )
+      
+
       const imageURL = await imageUpload(imageFile)
-      // const cloudinaryImageUrl = await imageUploadCloudinary(imageFile)
-      // console.log('Cloudinary Response ----->', cloudinaryImageUrl)
+      
 
       //1. User Registration
       const result = await createUser(email, password)
