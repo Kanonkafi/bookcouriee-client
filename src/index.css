@@ -1,2 +1,25 @@
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap');
+
 @import "tailwindcss";
 @plugin "daisyui";
+
+
+* {
+  font-family: "Lora", serif;
+}
+
+.navbar .active {
+  color: crimson;
+  font-weight: bold;
+  border: 1px solid #CAC8C8FF;
+  border-radius: 20px;
+  background: rgb(243, 226, 226);
+}
+
+html {
+  color-scheme: light dark;
+  transition: background-color 0.3s, color 0.3s;
+}
+html {
+  scroll-behavior: smooth;
+}
