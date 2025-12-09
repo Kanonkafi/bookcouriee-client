@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "title": "The Silent Patient",
+    "author": "Alex Michaelides",
+    "price": 20,
+    "category": "Thriller",
+    "image": "https://i.ibb.co/4f1hStH/book1.jpg",
+    "description": "A shocking psychological thriller...",
+    "status": "available"
+  },
+  {
+    "id": 2,
+    "title": "Atomic Habits",
+    "author": "James Clear",
+    "price": 18,
+    "category": "Self-help",
+    "image": "https://i.ibb.co/3zv1fN4/book2.jpg",
+    "description": "Build good habits and break bad ones...",
+    "status": "available"
+  }
+]

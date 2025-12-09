@@ -57,7 +57,7 @@ const NavBar = () => {
   if (loading) return null;
 
   return (
-    <nav className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 shadow-lg rounded-2xl mt-4 backdrop-blur-md z-50">
+    <nav className="relative z-[9999] bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 shadow-lg rounded-2xl mt-4 backdrop-blur-md">
       <div className="w-full flex justify-between items-center py-4 px-6">
         <Link to="/" className="text-3xl font-bold bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">BookCourier</Link>
 
@@ -70,8 +70,9 @@ const NavBar = () => {
 
           {!user ? (
             <div className="hidden md:flex space-x-2">
-              <Link to="/login" className="px-4 py-2 rounded-lg bg-indigo-500 text-white font-semibold hover:opacity-90 transition">Login</Link>
-              <Link to="/signup" className="px-4 py-2 rounded-lg bg-purple-500 text-white font-semibold hover:opacity-90 transition">Register</Link>
+              <Link to="/login" className="px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white font-semibold shadow-lg hover:scale-[1.02] transition">Login</Link>
+
+              <Link to="/signup" className="px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white font-semibold shadow-lg hover:scale-[1.02] transition">Register</Link>
             </div>
           ) : (
             <div ref={profileRef} className="relative">

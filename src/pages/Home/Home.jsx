@@ -1,13 +1,26 @@
-import React from 'react';
-
+import Banner from "../../components/Banner";
+import LatestBooks from "../../components/LatestBooks";
+import Coverage from "../../components/Coverage";
+import WhyUs from "../../components/WhyUs";
 
 const Home = () => {
-    return (
-          <div className="w-11/12 mx-auto space-y-16">
-      <h1 className="text-3xl font-bold">Welcome to BookCourier!</h1>
-      
+  return (
+    <div>
+      {/* Hero Banner */}
+      <Banner/>
+
+      {/* Latest Books */}
+      <LatestBooks/>
+
+      {/* Why Us */}
+      <WhyUs/>
+
+      {/* Coverage Map */}
+      <Coverage/>
+
     </div>
-    );
+  );
 };
 
 export default Home;
+
