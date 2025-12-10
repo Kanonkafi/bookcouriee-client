@@ -1,4 +1,4 @@
-// src/pages/pages_dashboard/Librarian/EditBook.jsx
+
 
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -6,13 +6,13 @@ import { TbFidgetSpinner } from 'react-icons/tb';
 import { useNavigate, useParams } from 'react-router-dom';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import { useQuery } from '@tanstack/react-query';
-// ⚠️ Note: ইমেজ আপলোড করার পর ইমেজ পরিবর্তন না করলে পুনরায় আপলোডের দরকার নেই
+//  Note: ইমেজ আপলোড করার পর ইমেজ পরিবর্তন না করলে পুনরায় আপলোডের দরকার নেই
 
 const EditBook = () => {
     const { id } = useParams(); // URL থেকে বুক আইডি নেওয়া
     const axiosSecure = useAxiosSecure();
     const navigate = useNavigate();
-    const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm();
+    const { register, handleSubmit, formState: { errors, isSubmitting },   } = useForm();
 
     // 🔑 বর্তমানে থাকা বইয়ের ডেটা লোড করা
     const { data: bookData, isLoading } = useQuery({

@@ -21,7 +21,7 @@ import Wishlist from "../pages/pages_dashboard/User/Wishlist";
 import AddBook from "../pages/pages_dashboard/Librarian/AddBook";
 import MyBooks from "../pages/pages_dashboard/Librarian/MyBooks";
 import ManageOrders from "../pages/pages_dashboard/Librarian/ManageOrders";
-
+import EditBook from "../pages/pages_dashboard/Librarian/EditBook";
 // Admin Dashboard
 import AllUsers from "../pages/pages_dashboard/Admin/AllUsers";
 import ManageBooks from "../pages/pages_dashboard/Admin/ManageBooks";
@@ -30,6 +30,7 @@ import ManageBooks from "../pages/pages_dashboard/Admin/ManageBooks";
 import PrivateRoute from "./PrivateRoute";
 import AdminRoute from "./AdminRoute";
 import LibrarianRoute from "./LibrarianRoute";
+
 
 export const router = createBrowserRouter([
   // ===============================
@@ -96,6 +97,15 @@ export const router = createBrowserRouter([
           </LibrarianRoute>
         ),
       },
+
+      {
+        path: "edit-book/:id", // নতুন রাউট
+       element: (
+        <LibrarianRoute>
+            <EditBook />
+        </LibrarianRoute>
+         ),
+       },
 
       // ----- Admin Dashboard -----
       {
