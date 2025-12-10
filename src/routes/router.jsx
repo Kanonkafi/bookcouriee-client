@@ -6,6 +6,7 @@ import ErrorPage from "../pages/ErrorPage";
 import Home from "../pages/Home/Home";
 import AllBooks from "../pages/Books/AllBooks";
 import BookDetails from "../pages/Books/BookDetails";
+import PaymentSuccess from "../pages/PaymentSuccess";
 
 // Auth
 import Login from "../pages/Auth/Login";
@@ -32,6 +33,7 @@ import AdminRoute from "./AdminRoute";
 import LibrarianRoute from "./LibrarianRoute";
 
 
+
 export const router = createBrowserRouter([
   // ===============================
   // Main Layout
@@ -44,6 +46,10 @@ export const router = createBrowserRouter([
       { path: "/", element: <Home /> },
       { path: "/books", element: <AllBooks /> },
       { path: "/books/:id", element: <BookDetails /> },
+      {
+        path: "/payment-success",
+        element: <PaymentSuccess />,
+    },
     ],
   },
 
