@@ -1,67 +1,111 @@
-import { Outlet, NavLink } from "react-router-dom";
-import { Menu, X, User, Book, ShoppingCart, Settings, Home } from "lucide-react";
-import { useState } from "react";
+// src/layouts/DashboardLayout.jsx
+
+import { NavLink, Outlet } from 'react-router-dom';
+import useRole from '../hooks/useRole';
+import { FaUser, FaBook, FaPlus, FaList, FaUsers, FaHome,FaDollarSign, FaSignOutAlt } from 'react-icons/fa';
+import useAuth from '../hooks/useAuth';
 
 const DashboardLayout = () => {
-  const [open, setOpen] = useState(false);
+    const { role, isRoleLoading } = useRole();
+    const { logOut, user } = useAuth();
+    
+    if (isRoleLoading) {
+        // লোডিং স্ক্রিন
+        return <div className="min-h-screen flex justify-center items-center text-2xl dark:text-gray-300">Loading Dashboard...</div>;
+    }
 
-  const navItems = [
-    { path: "/dashboard", label: "Overview", icon: Home },
-    { path: "/dashboard/my-orders", label: "My Orders", icon: ShoppingCart },
-    { path: "/dashboard/my-profile", label: "My Profile", icon: User },
-    { path: "/dashboard/invoices", label: "Invoices", icon: Book },
-  ];
+    const handleLogout = () => {
+        logOut().then(() => {});
+    };
 
-  return (
-    <div className="min-h-screen bg-base-200 flex">
+    // 🔗 রোল-ভিত্তিক লিঙ্কসমূহ
+    let dashboardLinks;
 
-      {/* SIDEBAR MOBILE BUTTON */}
-      <button
-        className="md:hidden p-4"
-        onClick={() => setOpen(!open)}
-      >
-        {open ? <X size={28} /> : <Menu size={28} />}
-      </button>
+    if (role === 'admin') {
+        dashboardLinks = (
+            <>
+                <NavLink to="all-users" className="dashboard-link">
+                    <FaUsers /> All Users
+                </NavLink>
+                <NavLink to="manage-books" className="dashboard-link">
+                    <FaBook /> Manage All Books
+                </NavLink>
+                {/* অন্যান্য অ্যাডমিন লিঙ্ক... */}
+            </>
+        );
+    } else if (role === 'librarian') {
+        dashboardLinks = (
+            <>
+                <NavLink to="add-book" className="dashboard-link">
+                    <FaPlus /> Add New Book
+                </NavLink>
+                <NavLink to="my-books" className="dashboard-link">
+                    <FaList /> My Inventory
+                </NavLink>
+                <NavLink to="orders" className="dashboard-link">
+                    <FaBook /> Manage Orders
+                </NavLink>
+            </>
+        );
+    } else { // ডিফল্ট User বা 'user'
+        dashboardLinks = (
+            <>
+                <NavLink to="my-orders" className="dashboard-link">
+                    <FaList /> My Orders
+                </NavLink>
+                <NavLink to="wishlist" className="dashboard-link">
+                    <FaBook /> Wishlist
+                </NavLink>
+                <NavLink to="my-profile" className="dashboard-link">
+                    <FaUser /> My Profile
+                </NavLink>
+                <NavLink to="invoices" className="dashboard-link">
+                    <FaDollarSign /> Invoices
+                </NavLink>
+            </>
+        );
+    }
+    
+    // Tailwind ক্লাসের জন্য (আপনার প্রয়োজন অনুযায়ী স্টাইল করুন)
+   // const activeClass = "bg-indigo-600 text-white";
+    const defaultClass = "text-gray-700 dark:text-gray-300 hover:bg-indigo-100 dark:hover:bg-gray-700";
 
-      {/* SIDEBAR */}
-      <aside className={`bg-white dark:bg-gray-900 shadow-xl p-6 fixed md:static inset-y-0 left-0 w-64 z-40 transform 
-        ${open ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
-        transition-transform duration-300`}>
+    return (
+        <div className="flex min-h-screen dark:bg-gray-900">
+            {/* Sidebar */}
+            <div className="w-64 bg-white dark:bg-gray-800 shadow-xl p-6 border-r dark:border-gray-700">
+                
+                {/* Profile Info */}
+                <div className="text-center mb-6 pb-4 border-b dark:border-gray-700">
+                    <img src={user?.photoURL || 'default-avatar.png'} alt="Profile" className="w-20 h-20 rounded-full mx-auto mb-2 object-cover" />
+                    <h3 className="text-lg font-bold dark:text-white">{user?.displayName}</h3>
+                    <p className="text-sm text-indigo-500 font-semibold capitalize">Role: {role}</p>
+                </div>
 
-        <h2 className="text-2xl font-bold mb-8 text-center bg-gradient-to-r from-indigo-500 to-purple-600 text-transparent bg-clip-text">
-          Dashboard
-        </h2>
+                {/* Dashboard Links */}
+                <nav className="space-y-2">
+                    {/* Role-Specific Links */}
+                    {dashboardLinks}
 
-        <ul className="space-y-4">
-          {navItems.map((item, i) => (
-            <li key={i}>
-              <NavLink
-                to={item.path}
-                className={({ isActive }) =>
-                  `flex items-center gap-3 p-3 rounded-lg font-medium transition
-                  ${
-                    isActive
-                      ? "bg-gradient-to-r from-indigo-500 to-purple-600 text-white"
-                      : "hover:bg-gray-200 dark:hover:bg-gray-700"
-                  }`
-                }
-              >
-                <item.icon size={20} />
-                {item.label}
-              </NavLink>
-            </li>
-          ))}
-        </ul>
+                    <div className="divider dark:before:bg-gray-700 dark:after:bg-gray-700"></div> 
 
-      </aside>
+                    {/* Shared Links */}
+                    <NavLink to="/" className={`${defaultClass} flex items-center gap-3 p-3 rounded-lg font-medium transition duration-200`}>
+                        <FaHome /> Go to Home
+                    </NavLink>
+                    
+                    <button onClick={handleLogout} className="w-full text-left flex items-center gap-3 p-3 rounded-lg font-medium transition duration-200 text-red-500 hover:bg-red-100 dark:hover:bg-red-900/40">
+                        <FaSignOutAlt /> Logout
+                    </button>
+                </nav>
+            </div>
 
-      {/* CONTENT AREA */}
-      <main className="flex-grow p-6 md:ml-0 ml-0 mt-4 md:mt-0 w-full">
-        <Outlet />
-      </main>
-
-    </div>
-  );
+            {/* Content Area */}
+            <div className="flex-1 p-8">
+                <Outlet />
+            </div>
+        </div>
+    );
 };
 
 export default DashboardLayout;
