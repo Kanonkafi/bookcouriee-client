@@ -2,25 +2,25 @@
 
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-//import useAxiosPublic from '../hooks/useAxiosPublic'; // পাবলিক ফেচের জন্য
-import { FaUser, FaTag, FaBookOpen, FaBoxesStacked, FaDollarSign } from 'react-icons/fa6';
-import OrderModal from '../../components/OrderModal'; // অর্ডার মডাল ইমপোর্ট করুন
 import axios from 'axios';
-import { useState } from 'react';
+import toast from 'react-hot-toast'; // টোস্ট নোটিফিকেশনের জন্য
+import { FaUser, FaTag, FaBookOpen, FaBoxesStacked, FaDollarSign } from 'react-icons/fa6';
+// import OrderModal from '../../components/OrderModal'; // ❌ স্ট্রাইপ চেকআউটের জন্য মডাল আর দরকার নেই
+import useAxiosSecure from '../../hooks/useAxiosSecure'; // 🔑 সিকিওর সার্ভার রিকোয়েস্টের জন্য
+import useAuth from '../../hooks/useAuth'; // 🔑 ইউজার ইমেইল নেওয়ার জন্য
 
 const BookDetails = () => {
-  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+    const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
     const { id } = useParams();
-   // const axiosPublic = useAxiosPublic();
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const axiosSecure = useAxiosSecure();
+    const { user } = useAuth(); // বর্তমান ইউজার তথ্য
     
     // বইয়ের ডিটেইলস ফেচ করা
     const { data: book = {}, isLoading } = useQuery({
         queryKey: ['bookDetails', id],
         queryFn: async () => {
-           // const res = await axiosSecquire.get(`/books/${id}`);
            const res = await axios.get(`${API_URL}/books/${id}`);
-            return res.data;
+           return res.data;
         },
     });
 
@@ -33,6 +33,45 @@ const BookDetails = () => {
     }
 
     const { name, author, price, image, category, description, quantity } = book;
+
+    // 🔑 Stripe Checkout হ্যান্ডলার
+    const handleBuyNow = async () => {
+        if (!user || !user.email) {
+            toast.error("Please log in to purchase the book.");
+            return;
+        }
+
+        if (quantity === 0) {
+             toast.error("This book is currently out of stock.");
+             return;
+        }
+
+        // 💰 পেমেন্ট পে লোড তৈরি করা
+        const paymentPayload = {
+            bookId: book._id,
+            price: price, 
+            name: name,
+            customerEmail: user.email, 
+        };
+        
+        const toastId = toast.loading('Initiating Payment...');
+
+        try {
+            // সার্ভারকে Stripe Checkout সেশন তৈরির রিকোয়েস্ট পাঠানো
+            const res = await axiosSecure.post('/create-checkout-session', paymentPayload);
+            
+            // Stripe থেকে পাওয়া URL এ ইউজারকে রিডাইরেক্ট করা
+            if (res.data.url) {
+                toast.dismiss(toastId); // লোডিং টোস্ট বন্ধ করা
+                window.location.replace(res.data.url); // ইউজারকে Stripe এ নিয়ে যাওয়া
+            } else {
+                throw new Error("Failed to get checkout URL from server.");
+            }
+        } catch (error) {
+            console.error("Stripe Checkout Error:", error);
+            toast.error(error.response?.data?.message || 'Error initiating payment.', { id: toastId });
+        }
+    };
 
 
     return (
@@ -88,7 +127,7 @@ const BookDetails = () => {
 
                         {/* Order Button */}
                         <button
-                            onClick={() => setIsModalOpen(true)}
+                            onClick={handleBuyNow} // 🔑 নতুন হ্যান্ডলার ব্যবহার করা হয়েছে
                             disabled={quantity === 0}
                             className={`w-full sm:w-80 py-3 text-lg font-bold text-white rounded-xl shadow-lg transition-all duration-300
                                 ${quantity > 0 
@@ -96,18 +135,18 @@ const BookDetails = () => {
                                     : 'bg-gray-400 cursor-not-allowed'
                                 }`}
                         >
-                            {quantity > 0 ? 'Order Now' : 'Out of Stock'}
+                            {quantity > 0 ? 'Buy Now with Stripe' : 'Out of Stock'}
                         </button>
                     </div>
                 </div>
             </div>
             
-            {/* Order Modal Component */}
-            <OrderModal 
+            {/* OrderModal আর দরকার নেই */}
+            {/* <OrderModal 
                 isOpen={isModalOpen} 
                 onClose={() => setIsModalOpen(false)} 
                 bookDetails={book}
-            />
+            /> */}
 
         </div>
     );
