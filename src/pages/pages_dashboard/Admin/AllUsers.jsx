@@ -74,7 +74,7 @@ const AllUsers = () => {
                             <th>Current Role</th>
                             <th>Make Librarian</th>
                             <th>Make Admin</th>
-                            <th>Demote to User</th> {/* 🔑 নতুন কলাম */}
+                            <th>Demote to User</th> 
                         </tr>
                     </thead>
                     {/* Table body */}

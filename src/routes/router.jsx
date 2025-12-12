@@ -26,11 +26,12 @@ import EditBook from "../pages/pages_dashboard/Librarian/EditBook";
 // Admin Dashboard
 import AllUsers from "../pages/pages_dashboard/Admin/AllUsers";
 import ManageBooks from "../pages/pages_dashboard/Admin/ManageBooks";
-
+import AdminProfile from "../pages/pages_dashboard/Admin/AdminProfile";
 // middleware
 import PrivateRoute from "./PrivateRoute";
 import AdminRoute from "./AdminRoute";
 import LibrarianRoute from "./LibrarianRoute";
+
 
 
 
@@ -71,8 +72,8 @@ export const router = createBrowserRouter([
     ),
     children: [
       // ----- User Dashboard -----
-      { index: true, element: <UserOrders /> },
-
+      //{ index: true, element: <UserOrders /> },
+       { index: true, element: <></> },
       { path: "my-orders", element: <UserOrders /> },
       { path: "my-profile", element: <UserProfile /> },
       { path: "invoices", element: <UserInvoices /> },
@@ -130,6 +131,10 @@ export const router = createBrowserRouter([
           </AdminRoute>
         ),
       },
+     {
+            path: 'admin-profile', 
+            element: <AdminRoute><AdminProfile /></AdminRoute>
+        },
     ],
   },
 ]);

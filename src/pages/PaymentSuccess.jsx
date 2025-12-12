@@ -118,7 +118,7 @@ const PaymentSuccess = () => {
                 )}
                 
                 <button
-                    onClick={() => navigate('/my-orders')}
+                    onClick={() => navigate('/dashboard/my-orders')}
                     className="w-full py-3 text-lg font-bold text-white rounded-xl shadow-lg transition-all duration-300 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 hover:shadow-purple-500/40 flex items-center justify-center space-x-2"
                 >
                     <FaBox/>
